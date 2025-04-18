@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart - OpenReads</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4ff;
+            color: #333;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: #240046;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f8f0fb;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left {
+            flex: 1;
+        }
+
+        form {
+            display: inline;
+        }
+
+        .qty-btn {
+            padding: 4px 10px;
+            font-size: 14px;
+            margin: 0 6px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .qty-btn:hover {
+            background-color: #ddd;
+        }
+
+        .remove-link {
+            margin-left: 15px;
+            color: #b5179e;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .remove-link:hover {
+            text-decoration: underline;
+        }
+
+        button.place-order {
+            margin-top: 20px;
+            padding: 10px 18px;
+            background-color: #5a189a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button.place-order:hover {
+            background-color: #3c096c;
+        }
+
+        .top-bar {
+            margin-bottom: 20px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        a {
+            color: #5a189a;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="top-bar">
+        {% if user.is_authenticated %}
+            Hello, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a> |
+            🛒 <a href="{% url 'view_cart' %}">Cart ({{ cart_count }})</a>
+        {% endif %}
+    </div>
+
+    <h1>🛒 Your Cart</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="success">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if cart_data %}
+        <ul>
+            {% for book, qty in cart_data.items %}
+            <li>
+                <div class="left">
+                    {{ book.title }} by {{ book.author.name }}
+                </div>
+                <div>
+                    <form action="{% url 'decrease_quantity' book.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="qty-btn">➖</button>
+                    </form>
+                    Quantity: {{ qty }}
+                    <form action="{% url 'increase_quantity' book.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="qty-btn">➕</button>
+                    </form>
+                    <a class="remove-link" href="{% url 'remove_from_cart' book.pk %}">✖ Remove</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <form method="post" action="{% url 'place_order_from_cart' %}">
+            {% csrf_token %}
+            <button type="submit" class="place-order">📦 Place Order</button>
+        </form>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+
+    <a href="{% url 'book_list' %}" class="back-link">← Back to book list</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Successful - OpenReads</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f8ff;
+            color: #333;
+            padding: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #5a189a;
+            font-size: 32px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .success-box {
+            display: inline-block;
+            background-color: #fff0f6;
+            border: 2px solid #f0c3e8;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background-color: #5a189a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #3c096c;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-box">
+        <h1>✅ Your Order Has Been Placed!</h1>
+        <p>Thank you for your order. You can now continue browsing our book collection.</p>
+        <a href="{% url 'book_list' %}" class="btn">← Back to Book List</a>
+    </div>
+</body>
+</html>
