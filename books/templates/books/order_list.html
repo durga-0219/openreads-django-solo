@@ -1,0 +1,62 @@
+<!-- books/templates/books/order_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Orders - Admin View</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f6ff;
+            padding: 30px;
+            color: #333;
+        }
+        h1 {
+            color: #4b0082;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        th {
+            background-color: #f3e8ff;
+            color: #4b0082;
+        }
+    </style>
+</head>
+<body>
+    <h1>📦 All Orders</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User</th>
+                <th>Book</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.user.username }}</td>
+                <td>{{ order.book.title }}</td>
+                <td>{{ order.created_at|date:"Y-m-d" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No orders found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

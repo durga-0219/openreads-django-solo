@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,14 +6,14 @@
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f0f4ff;
+            background-color: #eaf0ff;
             color: #333;
             padding: 30px;
             margin: 0;
         }
 
         .container {
-            max-width: 750px;
+            max-width: 900px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -44,6 +45,7 @@
 
         .left {
             flex: 1;
+            font-weight: 500;
         }
 
         form {
@@ -52,7 +54,7 @@
 
         .qty-btn {
             padding: 4px 10px;
-            font-size: 14px;
+            font-size: 16px;
             margin: 0 6px;
             background-color: #eee;
             border: 1px solid #ccc;
@@ -113,6 +115,21 @@
             display: block;
             margin-top: 25px;
         }
+
+        .total-box {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .price-display {
+            margin: 0 12px;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -127,12 +144,6 @@
 
     <h1>🛒 Your Cart</h1>
 
-    {% if messages %}
-        {% for message in messages %}
-            <p class="success">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
     {% if cart_data %}
         <ul>
             {% for book, qty in cart_data.items %}
@@ -145,16 +156,21 @@
                         {% csrf_token %}
                         <button type="submit" class="qty-btn">➖</button>
                     </form>
-                    Quantity: {{ qty }}
+                    {{ qty }}
                     <form action="{% url 'increase_quantity' book.pk %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="qty-btn">➕</button>
                     </form>
+                    <span class="price-display">${{ book.price|mul:qty|floatformat:2 }}</span>
                     <a class="remove-link" href="{% url 'remove_from_cart' book.pk %}">✖ Remove</a>
                 </div>
             </li>
             {% endfor %}
         </ul>
+
+        <div class="total-box">
+            💰 <strong>Total Amount: ${{ total_amount|floatformat:2 }}</strong>
+        </div>
 
         <form method="post" action="{% url 'place_order_from_cart' %}">
             {% csrf_token %}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - OpenReads</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f0ff;
+            padding: 30px;
+            color: #333;
+        }
+
+        h1 {
+            color: #4b0082;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 28%;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            background-color: #f0e6ff;
+        }
+
+        .chart-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #4b0082;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #37005f;
+        }
+
+        .button.clear-btn {
+            background-color: #888;
+        }
+
+        .filter-form {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: #f7f2ff;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-form label {
+            font-weight: bold;
+            color: #4b0082;
+        }
+
+        .filter-form select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            min-width: 180px;
+        }
+
+        .active-tags {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            background: #e6ccff;
+            color: #4b0082;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3e8ff;
+            color: #4b0082;
+        }
+
+        .logout-link {
+            float: right;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<div class="logout-link">
+    <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+<div class="stats">
+    <a href="{% url 'admin_book_list' %}" class="card">
+        <h2>Total Books</h2>
+        <p>{{ total_books }}</p>
+    </a>
+
+    <a href="{% url 'admin_order_list' %}" class="card">
+        <h2>Total Orders</h2>
+        <p>{{ total_orders }}</p>
+    </a>
+
+    <a href="{% url 'admin_user_list' %}" class="card">
+        <h2>Total Users</h2>
+        <p>{{ total_users }}</p>
+    </a>
+
+</div>
+
+<div class="chart-container">
+    <h2>📊 Top Ordered Books</h2>
+    <img src="{{ chart }}" alt="Chart">
+</div>
+
+<div class="controls">
+    <a href="{% url 'add_book' %}" class="button">➕ Add Book</a>
+    <a href="{% url 'export_books' %}" class="button">📥 Export All Books</a>
+    <a href="{% url 'export_filtered_books' %}?title={{ selected_title }}&author={{ selected_author }}&year={{ selected_year }}" class="button">📥 Export Filtered</a>
+</div>
+
+<form method="get" action="{% url 'custom_admin_dashboard' %}" class="filter-form">
+    <label for="title">Title:</label>
+    <select name="title" id="title">
+        <option value="">-- Choose a book title --</option>
+        {% for t in all_titles %}
+            <option value="{{ t }}" {% if selected_title == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="author">Author:</label>
+    <select name="author" id="author">
+        <option value="">-- Choose an author --</option>
+        {% for a in all_authors %}
+            <option value="{{ a }}" {% if selected_author == a %}selected{% endif %}>{{ a }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="year">Year:</label>
+    <select name="year" id="year">
+        <option value="">-- Year of Publication --</option>
+        {% for y in all_years %}
+            <option value="{{ y }}" {% if selected_year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="button">🔍 Search</button>
+    <a href="{% url 'custom_admin_dashboard' %}" class="button clear-btn">❌ Clear</a>
+</form>
+
+{% if selected_title or selected_author or selected_year %}
+<div class="active-tags">
+    {% if selected_title %}
+        <span class="tag">📘 {{ selected_title }}</span>
+    {% endif %}
+    {% if selected_author %}
+        <span class="tag">✍️ {{ selected_author }}</span>
+    {% endif %}
+    {% if selected_year %}
+        <span class="tag">📅 {{ selected_year }}</span>
+    {% endif %}
+</div>
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author.name }}</td>
+            <td>{{ book.year }}</td>
+            <td>${{ book.price }}</td>
+            <td class="action-buttons">
+                <a class="button" href="{% url 'update_book_price' book.pk %}">✏️ Edit Price</a>
+                <a class="button" href="{% url 'delete_book' book.pk %}">🗑️ Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No books available.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

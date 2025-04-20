@@ -8,7 +8,7 @@ urlpatterns = [
     path('book/<int:pk>/order/', views.place_order, name='place_order'),
 
     path('register/', views.register, name='register'),
-    path('login/', views.login_view, name='login'),  # ✅ Use your custom login view!
+    path('login/', views.login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
 
     path('book/<int:pk>/add-to-cart/', views.add_to_cart, name='add_to_cart'),
@@ -21,5 +21,18 @@ urlpatterns = [
     path('order-success/', views.order_success, name='order_success'),
     path('reset-cart/', views.reset_cart, name='reset_cart'),
 
-    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),  # ✅ only keep once
+    # ✅ Admin Panel (Custom)
+    path('admin-panel/', views.custom_admin_dashboard, name='custom_admin_dashboard'),
+    path('admin-panel/book/<int:pk>/edit/', views.update_book_price, name='update_book_price'),
+    path('admin-panel/book/<int:pk>/delete/', views.delete_book, name='delete_book'),
+    path('admin-panel/book/add/', views.add_book, name='add_book'),
+
+    # ✅ Export routes with correct names
+    path('export-books/', views.export_books_csv, name='export_books'),  # Matches {% url 'export_books' %}
+    path('export-filtered/', views.export_filtered_books_csv, name='export_filtered_books'),  # Matches {% url 'export_filtered_books' %}
+    # Custom admin views for cards
+    path('admin-users/', views.admin_user_list, name='admin_user_list'),
+    path('admin-orders/', views.admin_order_list, name='admin_order_list'),
+    path('admin-books/', views.admin_book_list, name='admin_book_list'),
+
 ]

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Book - OpenReads Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4ff;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #3c096c;
+            margin-bottom: 30px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #5a189a;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3c096c;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #5a189a;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>➕ Add New Book</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="author" placeholder="Author Name" required>
+        <input type="number" name="year" placeholder="Year of Publication" required>
+        <input type="number" name="price" placeholder="Price" step="0.01" required>
+        <input type="url" name="image_url" placeholder="Image URL (optional)">
+        <textarea name="description" placeholder="Description (optional)"></textarea>
+        <input type="text" name="isbn" placeholder="ISBN (optional)">
+        <input type="text" name="publisher" placeholder="Publisher (optional)">
+        <input type="number" name="rating" placeholder="Rating (1-5)" min="1" max="5">
+
+        <button type="submit">Add Book</button>
+    </form>
+
+    <a href="{% url 'custom_admin_dashboard' %}">← Back to Dashboard</a>
+</div>
+</body>
+</html>

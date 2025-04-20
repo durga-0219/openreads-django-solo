@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Users - OpenReads</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f0ff;
+            padding: 30px;
+            color: #333;
+        }
+
+        h1 {
+            color: #4b0082;
+            margin-bottom: 20px;
+        }
+
+        a.back-link {
+            text-decoration: none;
+            color: #4b0082;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3e8ff;
+            color: #4b0082;
+        }
+    </style>
+</head>
+<body>
+
+<a href="{% url 'custom_admin_dashboard' %}" class="back-link">← Back to Dashboard</a>
+
+<h1>All Users</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Date Joined</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.date_joined }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No users found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

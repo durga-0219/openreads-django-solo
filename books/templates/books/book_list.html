@@ -31,6 +31,11 @@
             text-decoration: underline;
         }
 
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
         .search-container {
             background: white;
             padding: 20px;
@@ -39,25 +44,26 @@
             margin: 30px 0;
         }
 
-        select {
+        .search-form {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-form label {
+            font-weight: bold;
+        }
+
+        .search-form select {
             padding: 8px 12px;
-            margin-right: 10px;
             border-radius: 6px;
             border: 1px solid #ccc;
-            max-width: 250px;         /* 📏 Limits width */
-            white-space: nowrap;      /* Prevents wrapping */
-            overflow: hidden;
-            text-overflow: ellipsis;  /* Adds "..." to long titles */
+            max-width: 250px;
         }
 
-        select option {
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        button {
+        .search-form button {
             padding: 8px 16px;
             border-radius: 6px;
             background-color: #5a189a;
@@ -67,10 +73,9 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .search-form button:hover {
             background-color: #3c096c;
         }
-
 
         h1 {
             color: #240046;
@@ -79,10 +84,11 @@
 
         ul {
             list-style-type: square;
+            padding-left: 20px;
         }
 
         li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .cart-icon {
@@ -90,11 +96,6 @@
             background: #fff0f6;
             padding: 5px 10px;
             border-radius: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: auto;
         }
     </style>
 </head>
@@ -107,6 +108,9 @@
             {% if user.is_authenticated %}
                 Hello, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a>
                 | 🛒 <a href="{% url 'view_cart' %}" class="cart-icon">Cart ({{ cart_count }})</a>
+                {% if user.is_superuser %}
+                    | <a href="{% url 'custom_admin_dashboard' %}">Admin Panel</a>
+                {% endif %}
             {% else %}
                 <a href="{% url 'login' %}">Login</a> |
                 <a href="{% url 'register' %}">Register</a>
@@ -115,14 +119,12 @@
     </div>
 
     <div class="search-container">
-        <form method="GET" action="">
+        <form method="GET" action="" class="search-form">
             <label for="title">Title:</label>
             <select name="title" id="title">
                 <option value="">-- Choose a book title --</option>
                 {% for title in all_titles %}
-                    <option value="{{ title }}" {% if request.GET.title == title %}selected{% endif %}>
-                        {{ title }}
-                    </option>
+                    <option value="{{ title }}" {% if request.GET.title == title %}selected{% endif %}>{{ title }}</option>
                 {% endfor %}
             </select>
 
@@ -130,9 +132,15 @@
             <select name="author" id="author">
                 <option value="">-- Choose an author --</option>
                 {% for author in all_authors %}
-                    <option value="{{ author }}" {% if request.GET.author == author %}selected{% endif %}>
-                        {{ author }}
-                    </option>
+                    <option value="{{ author }}" {% if request.GET.author == author %}selected{% endif %}>{{ author }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="year">Year:</label>
+            <select name="year" id="year">
+                <option value="">-- Year of Publication --</option>
+                {% for year in all_years %}
+                    <option value="{{ year }}" {% if request.GET.year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
                 {% endfor %}
             </select>
 
@@ -144,7 +152,10 @@
 
     <ul>
         {% for book in books %}
-            <li><a href="{% url 'book_detail' book.pk %}">{{ book.title }} by {{ book.author.name }}</a></li>
+            <li>
+                <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+                by {{ book.author.name }} ({{ book.year }}) — ${{ book.price }}
+            </li>
         {% empty %}
             <p>No books match your search. Try again!</p>
         {% endfor %}

@@ -7,9 +7,10 @@ class BookTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.superuser = User.objects.create_superuser(username='admin', password='adminpass')
 
         self.author = Author.objects.create(name='Test Author')
-        self.book = Book.objects.create(title='Test Book', author=self.author, year=2020)
+        self.book = Book.objects.create(title='Test Book', author=self.author, year=2020, price=20.00)
 
     def test_book_list_view_redirects_for_guest(self):
         response = self.client.get(reverse('book_list'))
@@ -54,16 +55,10 @@ class BookTests(TestCase):
 
     def test_cart_quantity_increase_and_decrease(self):
         self.client.login(username='testuser', password='testpass')
-
-        # Add book to cart
         self.client.get(reverse('add_to_cart', args=[self.book.pk]))
-
-        # Increase quantity
         self.client.post(reverse('increase_quantity', args=[self.book.pk]))
         session = self.client.session
         self.assertEqual(session['cart'][str(self.book.pk)], 2)
-
-        # Decrease quantity
         self.client.post(reverse('decrease_quantity', args=[self.book.pk]))
         session = self.client.session
         self.assertEqual(session['cart'][str(self.book.pk)], 1)
@@ -73,7 +68,32 @@ class BookTests(TestCase):
         session = self.client.session
         session['cart'] = {str(self.book.pk): 1}
         session.save()
-
         self.client.post(reverse('place_order_from_cart'))
         session = self.client.session
         self.assertEqual(session['cart'], {})
+
+    def test_admin_add_book(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('add_book'), {
+            'title': 'Admin Added Book',
+            'author': 'Admin Author',
+            'year': 2022,
+            'price': 35.00
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Book.objects.filter(title='Admin Added Book').exists())
+
+    def test_admin_update_book_price(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.post(reverse('update_book_price', args=[self.book.pk]), {
+            'price': 99.99
+        })
+        self.assertEqual(response.status_code, 302)
+        self.book.refresh_from_db()
+        self.assertEqual(float(self.book.price), 99.99)
+
+    def test_admin_delete_book(self):
+        self.client.login(username='admin', password='adminpass')
+        response = self.client.get(reverse('delete_book', args=[self.book.pk]))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Book.objects.filter(pk=self.book.pk).exists())

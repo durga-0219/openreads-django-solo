@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Price - OpenReads Admin</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4ff;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #3c096c;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #5a189a;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3c096c;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #5a189a;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>✏️ Edit Price for "{{ book.title }}"</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="number" name="price" value="{{ book.price }}" step="0.01" required>
+        <button type="submit">Update Price</button>
+    </form>
+
+    <a href="{% url 'custom_admin_dashboard' %}">← Back to Dashboard</a>
+</div>
+</body>
+</html>
