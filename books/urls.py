@@ -9,7 +9,7 @@ urlpatterns = [
 
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
 
     path('book/<int:pk>/add-to-cart/', views.add_to_cart, name='add_to_cart'),
     path('cart/', views.view_cart, name='view_cart'),
@@ -34,5 +34,5 @@ urlpatterns = [
     path('admin-users/', views.admin_user_list, name='admin_user_list'),
     path('admin-orders/', views.admin_order_list, name='admin_order_list'),
     path('admin-books/', views.admin_book_list, name='admin_book_list'),
-
+    
 ]

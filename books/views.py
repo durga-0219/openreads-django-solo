@@ -12,6 +12,7 @@ import io
 import base64
 from collections import Counter
 import csv
+from django.contrib.auth import logout
 
 # ---------- Custom Login ----------
 def login_view(request):
@@ -320,5 +321,8 @@ def admin_book_list(request):
     books = Book.objects.all()
     return render(request, 'books/admin_book_list.html', {'books': books})
 
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 
