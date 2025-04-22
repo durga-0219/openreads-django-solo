@@ -14,7 +14,7 @@ from collections import Counter
 import csv
 from django.contrib.auth import logout
 
-# ---------- Custom Login ----------
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -30,7 +30,6 @@ def login_view(request):
     return render(request, 'books/login.html')
 
 
-# ---------- Registration ----------
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -45,9 +44,9 @@ def register(request):
     return render(request, 'books/register.html', {'form': form})
 
 
-# ---------- Book List + Filters ----------
 @login_required
 def book_list(request):
+    #raise Exception("Test 500 Error: This is intentional for verifying custom error pages.")
     title_query = request.GET.get('title')
     author_query = request.GET.get('author')
     year_query = request.GET.get('year')
@@ -69,7 +68,6 @@ def book_list(request):
     })
 
 
-# ---------- Book Detail ----------
 @login_required
 def book_detail(request, pk):
     storage = messages.get_messages(request)
@@ -78,13 +76,13 @@ def book_detail(request, pk):
     return render(request, 'books/book_detail.html', {'book': book})
 
 
-# ---------- Cart Management ----------
 @login_required
 def add_to_cart(request, pk):
     cart = request.session.get('cart', {})
     cart[str(pk)] = cart.get(str(pk), 0) + 1
     request.session['cart'] = cart
     return redirect('book_list')
+
 
 @login_required
 def view_cart(request):
@@ -100,6 +98,7 @@ def view_cart(request):
     total_amount = sum(book.price * quantity for book, quantity in cart_data.items())
     return render(request, 'books/cart.html', {'cart_data': cart_data, 'total_amount': total_amount})
 
+
 @login_required
 def place_order_from_cart(request):
     cart = request.session.get('cart', {})
@@ -110,6 +109,7 @@ def place_order_from_cart(request):
     request.session['cart'] = {}
     return redirect('order_success')
 
+
 @login_required
 def place_order(request, pk):
     book = get_object_or_404(Book, pk=pk)
@@ -117,9 +117,11 @@ def place_order(request, pk):
     messages.success(request, "Your order for this book has been placed!")
     return redirect('book_detail', pk=pk)
 
+
 @login_required
 def order_success(request):
     return render(request, 'books/order_success.html')
+
 
 @login_required
 def remove_from_cart(request, pk):
@@ -128,6 +130,7 @@ def remove_from_cart(request, pk):
     request.session['cart'] = cart
     return redirect('view_cart')
 
+
 @require_POST
 @login_required
 def increase_quantity(request, pk):
@@ -135,6 +138,7 @@ def increase_quantity(request, pk):
     cart[str(pk)] = cart.get(str(pk), 0) + 1
     request.session['cart'] = cart
     return redirect('view_cart')
+
 
 @require_POST
 @login_required
@@ -147,13 +151,13 @@ def decrease_quantity(request, pk):
     request.session['cart'] = cart
     return redirect('view_cart')
 
+
 @login_required
 def reset_cart(request):
     request.session['cart'] = {}
     return HttpResponse("Cart has been reset. You can now safely go back.")
 
 
-# ---------- Admin Dashboard ----------
 @login_required
 def custom_admin_dashboard(request):
     if not request.user.is_superuser:
@@ -208,7 +212,6 @@ def custom_admin_dashboard(request):
     })
 
 
-# ---------- Admin Book Management ----------
 @login_required
 def update_book_price(request, pk):
     if not request.user.is_superuser:
@@ -260,7 +263,6 @@ def delete_book(request, pk):
     return redirect('custom_admin_dashboard')
 
 
-# ---------- Export CSV ----------
 @login_required
 def export_books_csv(request):
     if not request.user.is_superuser:
@@ -272,6 +274,7 @@ def export_books_csv(request):
     for book in Book.objects.all():
         writer.writerow([book.title, book.author.name, book.year, book.price])
     return response
+
 
 @login_required
 def export_filtered_books_csv(request):
@@ -298,6 +301,7 @@ def export_filtered_books_csv(request):
         writer.writerow([book.title, book.author.name, book.year, book.price])
     return response
 
+
 @login_required
 def admin_user_list(request):
     if not request.user.is_superuser:
@@ -320,6 +324,7 @@ def admin_book_list(request):
         return redirect('book_list')
     books = Book.objects.all()
     return render(request, 'books/admin_book_list.html', {'books': books})
+
 
 def logout_view(request):
     logout(request)

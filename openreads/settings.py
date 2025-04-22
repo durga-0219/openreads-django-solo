@@ -61,12 +61,12 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [  # 👈 MUST go inside OPTIONS!
+            'context_processors': [  
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'books.context_processors.cart_count',  # 👈 This is your custom one
+                'books.context_processors.cart_count',  
             ],
         },
     },
@@ -128,7 +128,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/login/'               # 🔐 Where to send unauthenticated users
-LOGIN_REDIRECT_URL = '/'            # ✅ Where to go after login
-LOGOUT_REDIRECT_URL = '/login/'     # 👋 Where to go after logout
-
+LOGIN_URL = '/login/'               
+LOGIN_REDIRECT_URL = '/'            
+LOGOUT_REDIRECT_URL = '/login/'     

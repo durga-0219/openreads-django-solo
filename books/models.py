@@ -37,4 +37,4 @@ class Review(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=timezone.now)  # ✅ Not auto_now or auto_now_add
+    created_at = models.DateTimeField(default=timezone.now)
