@@ -26,9 +26,9 @@ SECRET_KEY = ('DJANGO_SECRET_KEY', 'django-insecure-!tky6*4(d-bppo$wk==9!y111y!&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['similarstrong-rajatime-8000.codio-box.uk']
+ALLOWED_HOSTS = ['similarstrong-rajatime-8000.codio-box.uk', 'openreads-django.onrender.com']
 
-CSRF_TRUSTED_ORIGINS = ['https://similarstrong-rajatime-8000.codio-box.uk', 'https://*.onrender.com', 'https://*.render.com']
+CSRF_TRUSTED_ORIGINS = ['https://similarstrong-rajatime-8000.codio-box.uk', 'https://openreads-django.onrender.com']
 
 
 
