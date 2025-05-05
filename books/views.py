@@ -13,6 +13,7 @@ import base64
 from collections import Counter
 import csv
 from django.contrib.auth import logout
+import seaborn as sns
 
 
 def login_view(request):
@@ -171,13 +172,16 @@ def custom_admin_dashboard(request):
     top_titles = list(order_counts.keys())[:10]
     top_counts = list(order_counts.values())[:10]
 
-    plt.figure(figsize=(10, 6))
-    plt.barh(top_titles, top_counts, color='purple')
-    plt.xlabel("Orders")
-    plt.title("Top Ordered Books")
+    sns.set(style="whitegrid")
+    plt.figure(figsize=(12, 6))
+    sns.barplot(x=top_counts, y=top_titles, palette="magma")
+    plt.title("Top Ordered Books", fontsize=16, weight='bold', pad=20)
+    plt.xlabel("Orders", fontsize=12)
+    plt.ylabel("Book Title", fontsize=12)
     plt.tight_layout()
+
     buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', bbox_inches='tight')
     chart_data = base64.b64encode(buffer.getvalue()).decode()
     buffer.close()
 

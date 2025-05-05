@@ -12,6 +12,13 @@
         h1 {
             color: #4b0082;
         }
+        a.back-link {
+            color: #4b0082;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -32,6 +39,7 @@
     </style>
 </head>
 <body>
+    <a href="{% url 'custom_admin_dashboard' %}" class="back-link">← Back to Dashboard</a>
     <h1>📦 All Orders</h1>
     <table>
         <thead>
