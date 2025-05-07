@@ -24,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ('DJANGO_SECRET_KEY', 'django-insecure-!tky6*4(d-bppo$wk==9!y111y!&c2ts)&edc(^2c^3+*(a52o')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = False
 
-ALLOWED_HOSTS = ['similarstrong-rajatime-8000.codio-box.uk', 'openreads-django.onrender.com']
+ALLOWED_HOSTS = ['similarstrong-rajatime-8000.codio-box.uk']
 
-CSRF_TRUSTED_ORIGINS = ['https://similarstrong-rajatime-8000.codio-box.uk', 'https://openreads-django.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://similarstrong-rajatime-8000.codio-box.uk']
 
 
 
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,9 +123,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
