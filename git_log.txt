@@ -1,0 +1,13 @@
+724a675 - DURGA BHAVANI DANTULURI, 25 hours ago : Revert messaging related to Render deployment
+f444191 - DURGA BHAVANI DANTULURI, 25 hours ago : Initial commit for OpenReads Django Solo Project
+72f0ab3 - DURGA BHAVANI DANTULURI, 25 hours ago : Initial commit of OpenReads Django ESD Solo Project
+5431a53 - DURGA BHAVANI DANTULURI, 3 days ago : 🎨 Collected static files for production
+da1e339 - DURGA BHAVANI DANTULURI, 3 days ago : 🚀 Prepare project for Render deployment
+b148828 - DURGA BHAVANI DANTULURI, 3 days ago : 🚀 Prepare project for Render deployment
+543674a - DURGA BHAVANI DANTULURI, 2 weeks ago : 🔧 Added 500 error test in book_list view and  custom 404 error page
+ace5c3d - DURGA BHAVANI DANTULURI, 3 weeks ago : Add .gitignore to ignore pycache, db, venv, secrets
+a7fcfc8 - DURGA BHAVANI DANTULURI, 3 weeks ago : Updated logout logic, cleaned pycache, added .gitignore
+4ea2502 - DURGA BHAVANI DANTULURI, 3 weeks ago : ✅ Final updates: templates, views, admin dashboard, filters, export, user/order/book views
+59bbd9f - DURGA BHAVANI DANTULURI, 3 weeks ago : Final push after reconnecting terminal
+71fbf2e - DURGA BHAVANI DANTULURI, 3 weeks ago : Remove SQLite DB from tracking
+315270c - DURGA BHAVANI DANTULURI, 3 weeks ago : Initial commit for OpenReads project
